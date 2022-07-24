@@ -23,9 +23,19 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    comments: {
-      type: Array,
-    },
+    comments: [
+      {
+        userId: {
+          type: String,
+        },
+        comment: {
+          type: String
+        },
+        time: {
+          type: Date
+        }
+      }
+    ],
     upvoteCount: {
       type: Number,
       default: 0,

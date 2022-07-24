@@ -45,6 +45,7 @@ router.put(
 
 router.delete('/post/:postId', isAuth, feedController.deletePost);
 
+// POST /feed/post-comment
 router.post('/post-comment', isAuth, feedController.postComment);
 
 router.post('/post/upvote', isAuth, feedController.upvotePost);

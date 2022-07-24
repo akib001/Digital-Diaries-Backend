@@ -161,7 +161,7 @@ exports.deletePost = async (req, res, next) => {
   }
 };
 
-exports.postComment = (req, res, next) => {
+exports.postComment = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed, entered data is incorrect.');
@@ -169,28 +169,26 @@ exports.postComment = (req, res, next) => {
     throw error;
   }
 
-  const postId = req.body.postId;
-  const comment = req.body.comment;
+  const { postId, comment } = req.body;
 
-  Post.findById(postId)
-    .then((post) => {
-      if (!post) {
-        const error = new Error('Could not find post.');
-        error.statusCode = 404;
-        throw error;
-      }
-      post.comments.push(comment);
-      return post.save();
-    })
-    .then((result) => {
-      res.status(200).json({ message: 'Comment Added!', post: result });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
+  try {
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: {
+          comments: { userId: req.userId, comment: comment, time: new Date() },
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({ message: 'Comment Added!', post: post });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
 exports.upvotePost = async (req, res, next) => {
@@ -230,7 +228,6 @@ exports.upvotePost = async (req, res, next) => {
 
       // if User Already has upvote
       if (upvoteExist) {
-
         voteResult = await Post.findByIdAndUpdate(
           postId,
           {
@@ -371,4 +368,3 @@ exports.downvotePost = async (req, res, next) => {
     next(err);
   }
 };
-
