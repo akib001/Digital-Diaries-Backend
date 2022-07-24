@@ -7,7 +7,7 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    imageUrl: {
+    excerpt: {
       type: String,
       required: true,
     },
@@ -15,16 +15,25 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
+    featuredImageUrl: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
     comments: {
       type: Array,
       // default: undefined
     },
-    upvote: {
+    upvoteCount: {
       type: Number,
       default: 0,
     },
 
-    downvote: {
+    downvoteCount: {
       type: Number,
       default: 0,
     },
@@ -38,7 +47,7 @@ const postSchema = new Schema(
         }
       }
     ],
-    creator: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
