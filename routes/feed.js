@@ -7,25 +7,28 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 
 // GET /feed/posts
-router.get('/posts', isAuth, feedController.getPosts);
+router.get('/posts', feedController.getPosts);
 
-// POST /feed/post
+// POST /feed/post  -- CreatePost
 router.post(
   '/post',
   isAuth,
-  [
-    body('title')
-      .trim()
-      .isLength({ min: 5 }),
-    body('content')
-      .trim()
-      .isLength({ min: 5 })
-  ],
+  // [
+  //   body('title')
+  //     .trim()
+  //     .isLength({ min: 5 }),
+  //   body('content')
+  //     .trim()
+  //     .isLength({ min: 5 })
+  // ],
   feedController.createPost
 );
 
-router.get('/post/:postId', isAuth, feedController.getPost);
+// GET /feed/post/:postId -- fetch single post
+router.get('/post/:postId', feedController.getPost);
 
+
+// PUT /feed/post/:postId
 router.put(
   '/post/:postId',
   isAuth,
@@ -40,9 +43,9 @@ router.put(
   feedController.updatePost
 );
 
-router.post('/post-comment', isAuth, feedController.postComment);
-
 router.delete('/post/:postId', isAuth, feedController.deletePost);
+
+router.post('/post-comment', isAuth, feedController.postComment);
 
 router.post('/post/upvote', isAuth, feedController.upvotePost);
 

@@ -20,13 +20,11 @@ const postSchema = new Schema(
       required: true,
     },
     category: {
-      type: Schema.Types.ObjectId,
-      ref: 'Category',
+      type: String,
       required: true,
     },
     comments: {
       type: Array,
-      // default: undefined
     },
     upvoteCount: {
       type: Number,
