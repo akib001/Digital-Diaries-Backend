@@ -8,7 +8,7 @@ const User = require('../models/user');
 
 exports.getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find().populate({ path: 'author', select: '-password'});
     res.status(200).json({
       message: 'Fetched posts successfully.',
       posts: posts,
